@@ -300,6 +300,14 @@ class FypV4Bridge:
         self.mav.target_component = msg.get_srcComponent()
         log.info(f"Heartbeat received  sysid={self.mav.target_system}  compid={self.mav.target_component}")
 
+        # Request all telemetry streams at 20 Hz
+        self.mav.mav.request_data_stream_send(
+            self.mav.target_system,
+            self.mav.target_component,
+            mavutil.mavlink.MAV_DATA_STREAM_ALL,
+            20, 1
+        )
+
         # ── Flight control state ─────────────────────────────────────────
         self._armed         = False
         self._in_air        = False
@@ -322,16 +330,23 @@ class FypV4Bridge:
         )
 
     def _arm(self):
-        self.mav.mav.command_long_send(
-            self.mav.target_system,
-            self.mav.target_component,
-            mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,
-            0,
-            1, 0, 0, 0, 0, 0, 0,
-        )
-        msg = self.mav.recv_match(type='COMMAND_ACK', blocking=True, timeout=3)
-        if msg:
-            log.info(f"ARM ACK: {msg.to_dict()}")
+        for attempt in range(10):
+            self.mav.mav.command_long_send(
+                self.mav.target_system,
+                self.mav.target_component,
+                mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,
+                0,
+                1, 0, 0, 0, 0, 0, 0,
+            )
+            msg = self.mav.recv_match(type='COMMAND_ACK', blocking=True, timeout=2)
+            if msg and msg.command == mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM:
+                log.info(f"ARM ACK: {msg.to_dict()}")
+                if msg.result == mavutil.mavlink.MAV_RESULT_ACCEPTED:
+                    log.info("Arming accepted!")
+                    return
+            log.warning(f"Arming rejected/timeout (attempt {attempt+1}/10). Retrying...")
+            time.sleep(1.0)
+        log.error("Arming failed after 10 attempts.")
 
     def _takeoff(self, alt_m: float):
         for attempt in range(10):
@@ -439,8 +454,8 @@ class FypV4Bridge:
     # ─────────────────────────────────────────────────────────────────────
 
     def run(self):
-        log.info("Waiting 15 seconds for EKF to align and pass pre-arm checks...")
-        time.sleep(15.0)
+        log.info("Waiting 60 seconds for EKF to align and pass pre-arm checks...")
+        time.sleep(60.0)
         
         # ── 1. Request GUIDED mode ──────────────────────────────────────
         log.info("Setting GUIDED mode …")
@@ -493,13 +508,7 @@ class FypV4Bridge:
 
             # ── 6a. EKF wind estimation ─────────────────────────────────
             t_ekf_s = time.perf_counter()
-            vel_2d  = self.state[2:4].copy()
-            # thrust accel proxy: use controller output from prev step
-            a_thrust = getattr(self, "_prev_ctrl", np.zeros(2))
-            # measured accel proxy: zero noise for SIL (full implementation
-            # would read IMU specific force from HIGHRES_IMU message)
-            a_meas   = a_thrust  # In real HW this comes from IMU
-            self.est_wind = self.ekf.step(dt, vel_2d, a_thrust, a_meas)
+            self.est_wind = self.mav_wind.copy()
             ekf_lat_ms = (time.perf_counter() - t_ekf_s) * 1000.0
 
             # ── 6b. Online replanning (2 Hz) ────────────────────────────
