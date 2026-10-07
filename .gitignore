@@ -19,3 +19,8 @@ __pycache__/
 # Logs
 *.log
 *.csv
+*.tlog
+*.tlog.raw
+logs/
+sim_logs/
+Working Copy/
