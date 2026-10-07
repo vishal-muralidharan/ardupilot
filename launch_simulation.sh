@@ -156,19 +156,16 @@ SITL_LOG="${LOG_DIR}/sitl_$(date +%Y%m%d_%H%M%S).log"
 SITL_WORKDIR="/tmp/sitl_injambakkam"
 mkdir -p "${SITL_WORKDIR}"
 
-${PYTHON310} "${SIM_VEHICLE}" \
-    --vehicle=ArduCopter \
-    --frame=gazebo-iris \
-    --location=INJA \
-    --custom-location="12.9516,80.2573,6,0" \
-    --model=JSON \
-    --speedup=1 \
-    --out=udpout:127.0.0.1:14550 \
-    --out=udpout:127.0.0.1:14551 \
-    --no-mavproxy \
-    --wipe-eeprom \
-    --add-param-file="${PARAMS_FILE}" \
-    -D \
+ARDUCOPTER_BIN="${GAZEBO_DIR}/ardupilot/build/sitl/bin/arducopter"
+"${ARDUCOPTER_BIN}" \
+    -w \
+    --model JSON \
+    --speedup 1 \
+    --slave 0 \
+    --defaults "${PARAMS_FILE}" \
+    --sim-address 127.0.0.1 \
+    -I0 \
+    --home "12.9516,80.2573,6.0,0.0" \
     >"${SITL_LOG}" 2>&1 &
 
 SITL_PID=$!
