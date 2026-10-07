@@ -30,7 +30,7 @@ import pathlib
 import sys
 
 NbDir = pathlib.Path.cwd()
-FypRoot = NbDir.parents[3]
+FypRoot = pathlib.Path("/Users/VM/SSN Stuff/FYP")
 
 Manifest = {
     "current_ekf (WindEKFV6 inside Integrated Pipeline.py)": FypRoot / "Second Review/Code/Integration/Version 1/Integrated Pipeline.py",
@@ -78,7 +78,7 @@ import sys
 import pathlib
 
 NbDir = pathlib.Path.cwd()
-FypRoot = NbDir.parents[3]
+FypRoot = pathlib.Path("/Users/VM/SSN Stuff/FYP")
 WorkDir = NbDir / "Working Copy"
 WorkDir.mkdir(exist_ok=True)
 
@@ -553,10 +553,9 @@ print("TABLE 1 — PER-SCENARIO | [A]=ASSUMED BUS/BAT | [*]=NOT FAIR CROSS-REPLA
 for Scen in ScenariosList:
     Sub = Df[Df["Scenario"] == Scen][Sk].rename(columns=Rm)
     print(f"--- {Scen} ---")
-    display(Sub.reset_index(drop=True))
-
+    print(Sub.reset_index(drop=True))
 print("\nTABLE 2 — MEAN OVER SCENARIOS")
-display(DfMean[Sk].rename(columns=Rm).reset_index(drop=True))
+print(DfMean[Sk].rename(columns=Rm).reset_index(drop=True))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -573,7 +572,7 @@ for _, Row in DfMean.iterrows():
         Bv = float(BlRow[Col].values[0]) if not BlRow.empty else float("nan")
         D[f"D_{Col}"] = float(Row[Col]) - Bv
     DeltaRows.append(D)
-display(pd.DataFrame(DeltaRows).reset_index(drop=True))
+print(pd.DataFrame(DeltaRows).reset_index(drop=True))
 
 print("\nTABLE 4 — EKF CONTRIBUTION (FULL - EKF_ABLATION; SAME ADAPTIVE+MPPI, ONLY EKF DIFFERS)")
 Fr = DfMean[DfMean["Stack"] == StackLabels["full"]]
@@ -587,7 +586,7 @@ EkfR = [
     }
     for C in Mc if not Fr.empty and not Ar.empty
 ]
-display(pd.DataFrame(EkfR).reset_index(drop=True))
+print(pd.DataFrame(EkfR).reset_index(drop=True))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
