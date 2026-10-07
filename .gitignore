@@ -1,0 +1,21 @@
+# Build directories
+build/
+ardupilot/build/
+ardupilot_gazebo/build/
+*.o
+*.a
+*.so
+*.dylib
+*.bin
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+*.csv

@@ -1,0 +1,86 @@
+# ============================================================================
+# ArduPilot SITL Parameters – FYP V4 Injambakkam Simulation
+# ============================================================================
+# Location : Injambakkam Beach, Chennai, Tamil Nadu, India
+# Lat/Lon  : 12.9516° N, 80.2573° E
+# Elevation: 6 m MSL
+#
+# These parameters configure the Iris quadrotor for the Gazebo SIL mission.
+# Load with: sim_vehicle.py --add-param-file=injambakkam_ardupilot.parm
+# ============================================================================
+
+# ── Frame ──────────────────────────────────────────────────────────────────
+FRAME_CLASS,1           # Quad
+FRAME_TYPE,1            # X configuration
+
+# ── GPS ───────────────────────────────────────────────────────────────────
+GPS_TYPE,1              # Auto GPS
+GPS1_TYPE,1
+
+# ── EKF ───────────────────────────────────────────────────────────────────
+EK3_ENABLE,1            # Use EKF3
+EK2_ENABLE,0            # Disable EKF2
+AHRS_EKF_TYPE,3
+
+# ── Flight Mode Channels ───────────────────────────────────────────────────
+FLTMODE1,0              # Stabilize
+FLTMODE2,4              # Guided
+FLTMODE3,3              # Auto
+FLTMODE4,9              # Land
+FLTMODE5,6              # RTL
+FLTMODE6,0              # Stabilize
+
+# ── Guided Mode Settings ──────────────────────────────────────────────────
+GUID_OPTIONS,0          # Standard guided
+GUID_TIMEOUT,30         # 30 s failsafe
+
+# ── Arming ────────────────────────────────────────────────────────────────
+ARMING_CHECK,0          # Disable arming checks for SIL
+ARMING_RUDDER,0
+
+# ── Throttle / Hover ──────────────────────────────────────────────────────
+MOT_HOVER_LEARN,0       # Fixed hover throttle
+MOT_THST_HOVER,0.36     # Iris hover ~36%
+THR_MID,500
+
+# ── Speed Limits (matches FYP dynamics: UMax=5 m/s²) ─────────────────────
+WPNAV_SPEED,500         # 5.0 m/s horizontal cruise
+WPNAV_SPEED_UP,250      # 2.5 m/s climb
+WPNAV_SPEED_DN,150      # 1.5 m/s descent
+WPNAV_ACCEL,150         # 1.5 m/s² horizontal (under MPC override)
+WPNAV_ACCEL_C,100
+
+# ── Wind Compensation ─────────────────────────────────────────────────────
+# ArduPilot's internal wind estimate (for comparison vs FYP EKF)
+WIND_SPEED,4.0          # 4 m/s mean (coastal south-easterly)
+WIND_DIR,135            # South-east (135° from North)
+WIND_TURB,0.5           # 0.5 turbulence index (moderate)
+
+# ── Logging ───────────────────────────────────────────────────────────────
+LOG_BITMASK,655358      # Full logging including EKF, wind, nav
+LOG_DISARMED,1          # Log from power-on
+
+# ── Telemetry Rate Tuning ─────────────────────────────────────────────────
+SR0_EXTRA1,50           # ATTITUDE 50 Hz
+SR0_EXTRA2,50           # VFR_HUD 50 Hz
+SR0_EXTRA3,5            # Wind etc 5 Hz
+SR0_POSITION,50         # LOCAL/GLOBAL position 50 Hz
+SR0_PARAMS,10           # Parameter updates 10 Hz
+SR0_RAW_CTRL,50         # Raw control 50 Hz
+SR0_RAW_SENS,50         # IMU 50 Hz
+SR1_EXTRA1,50
+SR1_EXTRA2,50
+SR1_EXTRA3,5
+SR1_POSITION,50
+SR1_RAW_CTRL,50
+SR1_RAW_SENS,50
+
+# ── Safety / Failsafe ─────────────────────────────────────────────────────
+FS_THR_ENABLE,0         # Disable throttle failsafe (SIL)
+FS_GCS_ENABLE,0         # Disable GCS failsafe (SIL)
+BATT_FS_CRT_ACT,0       # Disable battery failsafe
+
+# ── Simulation-specific ───────────────────────────────────────────────────
+SIM_WIND_SPD,4.0        # Sim wind speed m/s (matches world plugin)
+SIM_WIND_DIR,135        # Sim wind direction (south-east)
+SIM_WIND_TURB,0.5       # Turbulence

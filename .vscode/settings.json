@@ -1,0 +1,7 @@
+{
+    "git.ignoredRepositories": [
+        "${workspaceFolder}/ardupilot",
+        "${workspaceFolder}/ardupilot/modules/ChibiOS",
+        "${workspaceFolder}/ardupilot_gazebo"
+    ]
+}
