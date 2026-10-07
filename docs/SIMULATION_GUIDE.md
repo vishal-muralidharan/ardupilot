@@ -41,12 +41,12 @@ This dashboard will show you the exact flight path overlaid on the 2D map, wind 
 
 ## What Is Yet to Be Done (Next Steps)
 
-1. **Step 1: Execute the Baseline (V3) Benchmark**
+1. **Step 1: Execute the Baseline (V1) Benchmark**
    - Run the original `baseline_v3.py` script to generate baseline benchmark data for the drone under theoretical physics.
 2. **Step 2: Execute the Simulation (V4) Flight**
    - Launch `./launch_simulation.sh` and allow the drone to complete the full 1 km coastal mission, generating the `fyp_v4_telemetry.csv`.
 3. **Step 3: Process the Comparison Analytics**
-   - Extract `fyp_v4_telemetry.csv` and overlay it against the V3 Baseline.
+   - Extract `fyp_v4_telemetry.csv` and overlay it against the V1 Baseline.
    - Produce side-by-side graphical comparisons for:
      - Path variations (how the MPC handles turbulence vs the baseline).
      - Cross-track error averages.

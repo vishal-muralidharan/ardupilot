@@ -1,12 +1,12 @@
 # FYP V4 Simulation — Future Steps and Roadmap
 
-This document outlines the detailed plan to complete the comparative evaluation between the **Baseline (V3)** and the **Adaptive LTV MPC (V4)** UAV flight pipelines under the realistic coastal turbulence of Injambakkam, Chennai.
+This document outlines the detailed plan to complete the comparative evaluation between the **Baseline (V1)** and the **Adaptive LTV MPC (V4)** UAV flight pipelines under the realistic coastal turbulence of Injambakkam, Chennai.
 
 ---
 
-## Phase 1: Baseline Generation (V3 Benchmark)
+## Phase 1: Baseline Generation (V1 Benchmark)
 
-**Objective:** Establish a reference dataset for flight path deviation and energy consumption using the legacy V3 control logic under mathematical turbulence.
+**Objective:** Establish a reference dataset for flight path deviation and energy consumption using the legacy V1 control logic under mathematical turbulence.
 
 ### 1.1 Environment Verification
 - Locate the original `baseline_v3.py` inside the Integration workspace.
@@ -58,8 +58,8 @@ This document outlines the detailed plan to complete the comparative evaluation 
 - Normalize the timestamps of both datasets, interpolating values if the baseline script ran at a different loop rate than the 50 Hz Gazebo MAVLink bridge.
 
 ### 3.2 Performance Metrics Extraction
-- **Cross-Track Error (RMSE):** Compute the Root Mean Square Error of the vehicle's deviation from the pure North 1 km line for both V3 and V4.
-- **Energy Savings Percentage:** Calculate the difference in final Total Energy (J) and SEC (Wh/km) between V3 and V4. A positive delta proves the energy-aware MPPI successfully generated a more efficient path.
+- **Cross-Track Error (RMSE):** Compute the Root Mean Square Error of the vehicle's deviation from the pure North 1 km line for both V1 and V4.
+- **Energy Savings Percentage:** Calculate the difference in final Total Energy (J) and SEC (Wh/km) between V1 and V4. A positive delta proves the energy-aware MPPI successfully generated a more efficient path.
 - **Latency Overheads:** Calculate the average computing time (in ms) of the V4 Adaptive MPC and the MPPI Replanner over the lifespan of the flight.
 
 ### 3.3 Visual Plotting
