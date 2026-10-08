@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="final_drone_world">
+    <!-- Essential Gazebo Systems -->
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+
+
+    <!-- Lighting -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.5 0.5 0.5 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ground -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.2 0.6 0.2 1</ambient>
+            <diffuse>0.2 0.6 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Visual "Dynamic Wind Points" using Particle Emitters -->
+    <!-- This creates visible cyan wind particles blowing across the flight path -->
+    <model name="wind_gust_1">
+      <pose>-10 15 5 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <particle_emitter name="emitter" type="box">
+          <emitting>true</emitting>
+          <size>20 20 10</size>
+          <rate>50</rate>
+          <duration>0</duration>
+          <lifetime>4</lifetime>
+          <material>
+            <ambient>0 1 1 0.8</ambient>
+            <diffuse>0 1 1 0.8</diffuse>
+          </material>
+          <particle_size>0.2 0.2 0.2</particle_size>
+          <min_velocity>4</min_velocity>
+          <max_velocity>8</max_velocity>
+          <color_start>0 1 1 0.8</color_start>
+          <color_end>0 1 1 0.0</color_end>
+        </particle_emitter>
+      </link>
+    </model>
+
+    <!-- The Drone -->
+    <model name="drone">
+      <pose>0 0 0.05 0 0 0</pose>
+      <link name="base_link">
+        <kinematic>true</kinematic>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <!-- Absolute path guaranteed to load -->
+              <uri>file:///Users/vishalmuralidharan/Applications/Gazebo/ardupilot_gazebo/models/iris_with_standoffs/meshes/iris.dae</uri>
+              <scale>1.5 1.5 1.5</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+    </model>
+  </world>
+</sdf>

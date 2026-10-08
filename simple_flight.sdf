@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="simple_flight_world">
+    <!-- Physics and basic rendering -->
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.5 0.5 0.5 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ground -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.3 0.8 0.3 1</ambient>
+            <diffuse>0.3 0.8 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Realistic Drone Mesh with Kinematic Trajectory -->
+    <model name="drone">
+      <pose>0 0 0.05 0 0 0</pose>
+      <link name="base_link">
+        <kinematic>true</kinematic>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file:///Users/vishalmuralidharan/Applications/Gazebo/ardupilot_gazebo/models/iris_with_standoffs/meshes/iris.dae</uri>
+              <scale>2 2 2</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+      <!-- Trajectory Follower Plugin -->
+      <plugin filename="gz-sim-trajectory-follower-system" name="gz::sim::systems::TrajectoryFollower">
+        <link_name>base_link</link_name>
+        <loop>false</loop>
+        <waypoints>
+          <!-- 1. Wait on the pad -->
+          <waypoint>
+            <time>0.0</time>
+            <pose>0 0 0.05 0 0 0</pose>
+          </waypoint>
+          <!-- 2. Takeoff straight up to 10m -->
+          <waypoint>
+            <time>4.0</time>
+            <pose>0 0 10 0 0 0</pose>
+          </waypoint>
+          <!-- 3. Fly to destination (30, 30) while yawing to face it -->
+          <waypoint>
+            <time>14.0</time>
+            <pose>30 30 10 0 0 0.785</pose>
+          </waypoint>
+          <!-- 4. Hover at destination -->
+          <waypoint>
+            <time>16.0</time>
+            <pose>30 30 10 0 0 0.785</pose>
+          </waypoint>
+          <!-- 5. Land gently -->
+          <waypoint>
+            <time>21.0</time>
+            <pose>30 30 0.05 0 0 0.785</pose>
+          </waypoint>
+          <!-- 6. Stay landed -->
+          <waypoint>
+            <time>30.0</time>
+            <pose>30 30 0.05 0 0 0.785</pose>
+          </waypoint>
+        </waypoints>
+      </plugin>
+    </model>
+  </world>
+</sdf>
