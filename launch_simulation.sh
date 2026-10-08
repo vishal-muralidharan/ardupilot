@@ -108,6 +108,8 @@ echo "[2/5] Setting up Gazebo environment …"
 export GZ_SIM_RESOURCE_PATH="${MODELS_DIR}:/opt/homebrew/share/gz/gz-sim8/worlds:/opt/homebrew/share/gz/gz-common5/media/materials/textures"
 export GZ_SIM_SYSTEM_PLUGIN_PATH="${BUILD_DIR}:/opt/homebrew/lib/gz-sim8/plugins"
 export GZ_VERSION=harmonic
+export GZ_IP=127.0.0.1
+export GZ_PARTITION=test
 
 # Check if plugin was built
 if [ ! -d "${BUILD_DIR}" ]; then
@@ -190,7 +192,11 @@ GAZEBO_LOG="${LOG_DIR}/gazebo_$(date +%Y%m%d_%H%M%S).log"
 
 gz sim -s -r "${WORLD_FILE}" >"${GAZEBO_LOG}" 2>&1 &
 GAZEBO_PID=$!
-echo "      Gazebo started  PID=${GAZEBO_PID}  log=${GAZEBO_LOG}"
+echo "      Gazebo server started  PID=${GAZEBO_PID}  log=${GAZEBO_LOG}"
+
+echo "      Starting Gazebo GUI client …"
+gz sim -g >/dev/null 2>&1 &
+GUI_PID=$!
 
 # Wait for Gazebo to fully start
 echo "      Waiting 15 s for Gazebo to load world …"
